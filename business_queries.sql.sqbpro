@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="Workforce_Analytics.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="1835"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="departments" custom_title="0" dock_id="1" table="4,11:maindepartments"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011e00ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">-- ====================================================================
+-- PROJECT: EXECUTIVE WORKFORCE ANALYTICS &amp; COMPENSATION OPTIMIZATION
+-- LAYER: BACKEND ANALYTICAL QUERY SUITE
+-- FILE: business_queries.sql
+-- ====================================================================
+
+-- Query 1: Internal Compensation Ranking Analysis
+-- Business Purpose: Identifies salary distribution hierarchies within departments to flag potential compression metrics.
+SELECT 
+    CleanDepartment AS Department,
+    EmployeeName AS Employee,
+    CurrentSalary AS Salary,
+    RANK() OVER(PARTITION BY CleanDepartment ORDER BY CurrentSalary DESC) AS Salary_Rank
+FROM employees;
+
+
+-- Query 2: Financial Attrition Exposure Matrix
+-- Business Purpose: Quantifies total annual salary capital tied up in high/medium attrition risk tiers per business unit.
+SELECT 
+    CleanDepartment AS Department,
+    LeavingRisk AS Risk_Level,
+    COUNT(EmployeeID) AS Total_Employees,
+    SUM(CurrentSalary) AS Financial_Risk_Exposure
+FROM employees
+GROUP BY CleanDepartment, LeavingRisk
+ORDER BY Financial_Risk_Exposure DESC;</sql><current_tab id="0"/></tab_sql></sqlb_project>
